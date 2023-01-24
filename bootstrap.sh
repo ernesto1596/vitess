@@ -131,7 +131,7 @@ install_zookeeper() {
   # This is how we'd download directly from source:
   # wget "https://dlcdn.apache.org/zookeeper/$zk/apache-$zk.tar.gz"
   $VTROOT/tools/wget-retry "${VITESS_RESOURCES_DOWNLOAD_URL}/apache-${zk}.tar.gz"
-  tar -xzf "$dist/apache-$zk.tar.gz"
+  tar -xzf "$dist/apache-$zk.tar.gz" --no-same-owner
   mv $dist/apache-$zk $dist/$vtzk
   mvn -f $dist/$vtzk/zookeeper-contrib/zookeeper-contrib-fatjar/pom.xml clean install -P fatjar -DskipTests
   mkdir -p $dist/$vtzk/lib
@@ -164,7 +164,7 @@ install_etcd() {
   $VTROOT/tools/wget-retry "https://github.com/etcd-io/etcd/releases/download/$version/$file"
   #$VTROOT/tools/wget-retry "${VITESS_RESOURCES_DOWNLOAD_URL}/${file}"
   if [ "$ext" = "tar.gz" ]; then
-    tar xzf "$file"
+    tar xzf "$file" --no-same-owner
   else
     unzip "$file"
   fi

@@ -60,10 +60,10 @@ done;
 vtctldclient GetTablets --keyspace commerce --shard 0 | grep "primary" || (echo "Timed out waiting for primary to be elected in commerce/0" && exit 1)
 
 # create the schema
-vtctldclient ApplySchema --sql-file create_commerce_schema.sql commerce
+vtctldclient ApplySchema --sql-file create_catalog_schema.sql commerce
 
 # create the vschema
-vtctldclient ApplyVSchema --vschema-file vschema_commerce_initial.json commerce
+vtctldclient ApplyVSchema --vschema-file vschema_catalog.json commerce
 
 # start vtgate
 CELL=zone1 ./scripts/vtgate-up.sh

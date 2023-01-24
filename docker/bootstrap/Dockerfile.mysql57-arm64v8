@@ -24,7 +24,7 @@ RUN apt-get update && \
     zlib1g-dev && \
     wget https://github.com/percona/percona-xtrabackup/archive/percona-xtrabackup-2.4.13.tar.gz \
         -P /opt && \
-    tar zxf /opt/percona-xtrabackup-2.4.13.tar.gz -C /opt && \
+    tar zxf /opt/percona-xtrabackup-2.4.13.tar.gz --no-same-owner -C /opt && \
     rm /opt/percona-xtrabackup-2.4.13.tar.gz && \
     cd /opt/percona-xtrabackup-percona-xtrabackup-2.4.13 && \
     mkdir bld && cd bld && \

@@ -1,0 +1,21 @@
+{
+    "tables": {
+        "items": {},
+        "alternateIds": {},
+        "title": {},
+        "description": {},
+        "platforms": {},
+        "tags": {},
+        "contents": {},
+        "contents_tags": {},
+        "images": {},
+        "itemReferences": {},
+        "bundles": {},
+        "stores": {},
+        "subscription": {},
+        "rating": {},
+        "moderation": {},
+        "queryProperties": {},
+        "searchProperties": {}
+    }
+}

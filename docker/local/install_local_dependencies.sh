@@ -13,7 +13,7 @@ DOWNLOAD_URL=https://storage.googleapis.com/etcd
 
 curl -k -L ${DOWNLOAD_URL}/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz -o /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
 mkdir -p /var/opt/etcd
-sudo tar xzvf /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz -C /var/opt/etcd --strip-components=1
+sudo tar xzvf /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz -C /var/opt/etcd --strip-components=1 --no-same-owner
 rm -f /tmp/etcd-${ETCD_VER}-linux-amd64.tar.gz
 
 mkdir -p /var/run/etcd && chown -R vitess:vitess /var/run/etcd

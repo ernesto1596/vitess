@@ -134,14 +134,14 @@ endif
 		-o ${VTROOTBIN} ./go/...
 
 # install copies the files needed to run Vitess into the given directory tree.
-# This target is optimized for docker images. It only installs the files needed for running vitess in docker
+# This target is optimized for podman images. It only installs the files needed for running vitess in docker
 # Usage: make install PREFIX=/path/to/install/root
 install: build
 	# binaries
 	mkdir -p "$${PREFIX}/bin"
 	cp "$${VTROOTBIN}/"{mysqlctl,mysqlctld,vtorc,vtadmin,vtctld,vtctlclient,vtctldclient,vtgate,vttablet,vtbackup} "$${PREFIX}/bin/"
 
-# Will only work inside the docker bootstrap for now
+# Will only work inside the podman bootstrap for now
 cross-install: cross-build
 	# binaries
 	mkdir -p "$${PREFIX}/bin"
@@ -299,11 +299,11 @@ docker_bootstrap_test:
 	flavors='$(DOCKER_IMAGES_FOR_TEST)' && ./test.go -pull=false -parallel=2 -bootstrap-version=${BOOTSTRAP_VERSION} -flavor=$${flavors// /,}
 
 docker_bootstrap_push:
-	for i in $(DOCKER_IMAGES); do echo "pushing bootstrap image: ${BOOTSTRAP_VERSION}-$$i"; docker push vitess/bootstrap:${BOOTSTRAP_VERSION}-$$i || exit 1; done
+	for i in $(DOCKER_IMAGES); do echo "pushing bootstrap image: ${BOOTSTRAP_VERSION}-$$i"; podman push vitess/bootstrap:${BOOTSTRAP_VERSION}-$$i || exit 1; done
 
 # Use this target to update the local copy of your images with the one on Dockerhub.
 docker_bootstrap_pull:
-	for i in $(DOCKER_IMAGES); do echo "pulling bootstrap image: $$i"; docker pull vitess/bootstrap:${BOOTSTRAP_VERSION}-$$i || exit 1; done
+	for i in $(DOCKER_IMAGES); do echo "pulling bootstrap image: $$i"; podman pull vitess/bootstrap:${BOOTSTRAP_VERSION}-$$i || exit 1; done
 
 
 define build_docker_image
@@ -312,11 +312,11 @@ define build_docker_image
 	chmod -R o=rx *;
 
 	if grep -q arm64 <<< ${2}; then \
-		echo "Building docker using arm64 buildx"; \
-		docker buildx build --platform linux/arm64 -f ${1} -t ${2} --build-arg bootstrap_version=${BOOTSTRAP_VERSION} .; \
+		echo "Building podman using arm64 buildx"; \
+		podman buildx build --platform linux/arm64 -f ${1} -t ${2} --build-arg bootstrap_version=${BOOTSTRAP_VERSION} .; \
 	else \
-		echo "Building docker using straight docker build"; \
-		docker build -f ${1} -t ${2} --build-arg bootstrap_version=${BOOTSTRAP_VERSION} .; \
+		echo "Building podman using straight podman build"; \
+		podman build -f ${1} -t ${2} --build-arg bootstrap_version=${BOOTSTRAP_VERSION} .; \
 	fi
 endef
 
@@ -371,8 +371,8 @@ release: docker_base
 		echo "Set the env var VERSION with the release version"; exit 1;\
 	fi
 	mkdir -p releases
-	docker build -f docker/Dockerfile.release -t vitess/release .
-	docker run -v ${PWD}/releases:/vt/releases --env VERSION=$(VERSION) vitess/release
+	podman build -f docker/Dockerfile.release -t vitess/release .
+	podman run -v ${PWD}/releases:/vt/releases --env VERSION=$(VERSION) vitess/release
 	git tag -m Version\ $(VERSION) v$(VERSION)
 	echo "A git tag was created, you can push it with:"
 	echo "git push origin v$(VERSION)"
